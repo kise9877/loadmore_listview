@@ -2,14 +2,14 @@ group 'listview.loadmore.loadmore_listview'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.6.10'
+    ext.kotlin_version = '1.7.10'
     repositories {
         google()
-        mavenCentral()
+        jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.2'
+        classpath 'com.android.tools.build:gradle:8.1.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -17,7 +17,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        mavenCentral()
+        jcenter()
     }
 }
 
@@ -25,22 +25,25 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 31
-
+    if (project.android.hasProperty('namespace') ||
+        getGradle().getGradleVersion().substring(0, 1).toInteger() >= 8) {
+        namespace "listview.loadmore.loadmore_listview"
+    }
+    compileSdk 33
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17.toString()
+        targetCompatibility JavaVersion.VERSION_17.toString()
     }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
+    java {
+        toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+        }
     }
-
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs += "src/main/java"
     }
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 21
     }
 }
